@@ -1,0 +1,29 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ping-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ping-app
+  template:
+    metadata:
+      labels:
+        app: ping-app
+    spec:
+      containers:
+        - name: ping-app
+          image: ghcr.io/galonge/ping-app:1.0
+          envFrom:
+          - configMapRef:
+              name: app-config
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 50m
+              memory: 64Mi
+          command: ["/app/ping.sh", "$(PING_HOST)"]
